@@ -1,0 +1,31 @@
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+secrets.json
+config.local.js
+ 
+# Node / web projects (planned Supabase, Vercel build)
+node_modules/
+dist/
+build/
+.next/
+.vercel/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json.bak
+ 
+# Supabase local files (if using Supabase CLI)
+supabase/.branches
+supabase/.temp
+ 
+# OS and editor junk
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
+*.swp
