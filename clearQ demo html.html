@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClearQ SG — Clinic X</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+ --blue: #1a56a0;
+ --blue-d: #0f3d7a;
+ --blue-l: #ddeaf8;
+ --blue-p: #f0f5fc;
+ --green: #0f7a4a;
+ --green-l: #d6f5e8;
+ --green-p: #edfaf4;
+ --amber: #a05c00;
+ --amber-l: #fdefd8;
+ --red: #b91c1c;
+ --red-l: #fee2e2;
+ --ink: #0d1b2a;
+ --ink-2: #3a4a5c;
+ --ink-3: #7a8fa6;
+ --ink-4: #b8c8d8;
+ --surf: #f4f7fa;
+ --surf-2: #e8eef4;
+ --white: #ffffff;
+ --r-s: 8px;
+ --r-m: 12px;
+ --r-l: 18px;
+ --r-xl: 24px;
+}
+
+body {
+ font-family: 'Nunito', system-ui, sans-serif;
+ background: var(--surf);
+ color: var(--ink);
+ min-height: 100vh;
+ font-size: 15px;
+ line-height: 1.5;
+ -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ── */
+.nav { background: var(--ink); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.25); }
+.nav-inner {
+ max-width: 1160px; margin: 0 auto; padding: 0 24px;
+ display: flex; align-items: stretch; justify-content: space-between; flex-wrap: wrap;
+}
+.brand {
+ display: flex; align-items: center; gap: 10px; padding: 13px 0; flex-shrink: 0;
+}
+.brand-mark {
+ width: 32px; height: 32px; border-radius: 9px;
+ background: var(--blue); display: flex; align-items: center; justify-content: center;
+ font-size: 13px; font-weight: 700; color: white; letter-spacing: -0.5px;
+}
+.brand-name { font-size: 15px; font-weight: 600; color: white; }
+.brand-sep { width: 1px; height: 18px; background: #2a3a4a; margin: 0 4px; }
+.brand-clinic { font-size: 13px; color: #5a7a9a; font-weight: 400; }
+
+.tabs { display: flex; }
+.tab {
+ background: transparent; border: none; border-bottom: 2.5px solid transparent;
+ color: #5a7a9a; font-family: inherit; font-size: 12px; font-weight: 500;
+ padding: 0 15px; cursor: pointer; display: flex; flex-direction: column;
+ align-items: center; justify-content: center; gap: 2px; white-space: nowrap;
+ min-height: 58px; transition: color 0.15s, border-color 0.15s;
+}
+.tab:hover { color: #8aafc8; }
+.tab.active { color: white; border-bottom-color: var(--blue); }
+.tab-eyebrow {
+ font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em;
+ color: var(--blue); line-height: 1;
+}
+.tab.active .tab-eyebrow { color: #6aaff0; }
+
+/* ── WRAPPER ── */
+.wrap { max-width: 1160px; margin: 0 auto; padding: 36px 24px 80px; }
+.sheet { display: none; }
+.sheet.active { display: block; }
+
+/* ── PAGE BAR ── */
+.pbar {
+ display: flex; align-items: center; justify-content: flex-end;
+ margin-bottom: 28px;
+}
+.clock {
+ display: inline-flex; align-items: center; gap: 7px;
+ background: var(--white); border: 1px solid var(--surf-2);
+ border-radius: var(--r-m); padding: 8px 14px;
+ font-size: 12px; font-weight: 500; color: var(--ink-2);
+ box-shadow: 0 1px 3px rgba(0,0,0,0.05); font-variant-numeric: tabular-nums;
+}
+.cdot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: blink 1.2s infinite; flex-shrink: 0; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.15} }
+
+/* ── CARD ── */
+.card {
+ background: var(--white); border-radius: var(--r-l);
+ border: 1px solid var(--surf-2); box-shadow: 0 1px 4px rgba(0,0,0,0.05); overflow: hidden;
+}
+
+/* ── QR1 — REGISTRATION ── */
+.qr1-card { max-width: 480px; margin: 0 auto; }
+.reg-top {
+ background: var(--blue); padding: 26px 28px 22px;
+ display: flex; align-items: center; justify-content: space-between;
+}
+.reg-top-left .rt-clinic { font-size: 19px; font-weight: 600; color: white; letter-spacing: -0.3px; }
+.reg-top-left .rt-sub { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 3px; }
+.reg-top-right { font-size: 28px; }
+.reg-body { padding: 28px; position: relative; }
+
+.fg { margin-bottom: 18px; }
+.fl { display: block; font-size: 11px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
+.fl-opt { font-size: 11px; color: var(--ink-4); font-weight: 400; text-transform: none; letter-spacing: 0; }
+.returning-tag {
+ display: none;
+ align-items: center;
+ gap: 6px;
+ font-size: 12px;
+ font-weight: 500;
+ color: var(--green);
+ margin-top: 8px;
+ opacity: 0;
+ transform: translateY(-4px);
+ transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.returning-tag.show {
+ display: flex;
+ opacity: 1;
+ transform: translateY(0);
+}
+.fi {
+ width: 100%; padding: 11px 14px; border: 1.5px solid var(--surf-2);
+ border-radius: var(--r-s); font-family: inherit; font-size: 14px;
+ color: var(--ink); background: var(--surf); outline: none;
+ transition: border-color 0.15s, background 0.15s;
+}
+.fi:focus { border-color: var(--blue); background: var(--white); }
+.fi::placeholder { color: var(--ink-4); }
+.fi[readonly] { background: var(--green-p); border-color: var(--green-l); color: var(--ink); cursor: default; }
+.fi-select {
+ width: 100%; padding: 11px 14px; border: 1.5px solid var(--surf-2);
+ border-radius: var(--r-s); font-family: inherit; font-size: 14px;
+ color: var(--ink); background: var(--surf); outline: none; appearance: none;
+ cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%237a8fa6' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+ background-repeat: no-repeat; background-position: right 14px center;
+}
+.btn-join {
+ width: 100%; background: var(--blue); color: white; border: none;
+ border-radius: var(--r-s); padding: 14px; font-family: inherit;
+ font-size: 15px; font-weight: 600; cursor: pointer; letter-spacing: -0.1px;
+ transition: background 0.15s, transform 0.1s; margin-top: 4px;
+}
+.btn-join:hover { background: var(--blue-d); }
+.btn-join:active { transform: scale(0.99); }
+.wa { color: #22c55e; font-weight: 500; }
+
+/* ── SUCCESS ANIMATION ── */
+.reg-success {
+ display: none;
+ flex-direction: column;
+ align-items: center;
+ text-align: center;
+ padding: 12px 0 4px;
+ opacity: 0;
+ transform: scale(0.92);
+ transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.reg-success.show {
+ display: flex;
+ opacity: 1;
+ transform: scale(1);
+}
+.success-ring {
+ width: 84px; height: 84px; border-radius: 50%;
+ background: var(--green);
+ display: flex; align-items: center; justify-content: center;
+ margin-bottom: 18px;
+ animation: ring-pop 0.45s ease;
+ box-shadow: 0 0 0 0 rgba(15,122,74,0.4);
+}
+@keyframes ring-pop {
+ 0% { transform: scale(0); }
+ 60% { transform: scale(1.12); }
+ 100% { transform: scale(1); }
+}
+.success-tick {
+ stroke-dasharray: 60;
+ stroke-dashoffset: 60;
+ animation: tick-draw 0.5s ease 0.15s forwards;
+}
+@keyframes tick-draw { to { stroke-dashoffset: 0; } }
+.success-heading {
+ font-size: 21px; font-weight: 700; color: var(--ink);
+ margin-bottom: 6px; letter-spacing: -0.3px;
+}
+.success-qnum {
+ font-size: 42px; font-weight: 700; color: var(--blue);
+ letter-spacing: -1px; margin-bottom: 14px;
+}
+.success-text {
+ font-size: 13px; color: var(--ink-3); line-height: 1.7; max-width: 320px;
+}
+
+/* ── QR1 STEP: REDIRECT / CONFIRMING (ClearQ-branded interstitials) ── */
+.redirect-wrap { padding: 56px 32px; text-align: center; }
+.redirect-spinner {
+ width: 44px; height: 44px; border-radius: 50%;
+ border: 4px solid var(--blue-l); border-top-color: var(--blue);
+ margin: 0 auto 22px; animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.redirect-clinic { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.redirect-msg { font-size: 13px; color: var(--ink-3); line-height: 1.7; }
+.redirect-msg strong { color: var(--ink-2); }
+
+/* ── QR1 STEPS: PLATO MOCK (deliberately different font + accent colour from ClearQ,
+   plus a fake browser chrome bar — sells the "different site" illusion to non-technical
+   clinic owners watching the demo) ── */
+.plato-card {
+ max-width: 520px; margin: 0 auto;
+ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+}
+.browser-chrome {
+ display: flex; align-items: center; gap: 8px;
+ padding: 10px 14px; background: #e9edf2; border-bottom: 1px solid var(--surf-2);
+}
+.bc-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.bc-r { background: #ff5f56; } .bc-y { background: #ffbd2e; } .bc-g { background: #27c93f; }
+.bc-url {
+ flex: 1; display: flex; align-items: center; gap: 6px;
+ background: #fff; border: 1px solid #d7dee6; border-radius: 999px;
+ padding: 5px 12px; font-size: 11px; color: #4a5568; font-family: ui-monospace, monospace;
+ overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+}
+.plato-body { padding: 34px 32px 30px; text-align: center; }
+.plato-body .fg { text-align: left; margin-bottom: 16px; }
+.plato-h { font-size: 21px; font-weight: 700; color: #0f1522; letter-spacing: -0.3px; margin-bottom: 8px; }
+.plato-sub { font-size: 13.5px; color: #5b6472; line-height: 1.6; margin-bottom: 22px; }
+.plato-meta {
+ display: inline-flex; align-items: center; gap: 7px;
+ background: #f3f5f8; border: 1px solid #e4e8ee; border-radius: 999px;
+ padding: 8px 16px; font-size: 13px; color: #374151; margin-bottom: 26px;
+}
+.purpose-list { display: flex; flex-direction: column; gap: 12px; text-align: left; }
+.purpose-opt {
+ width: 100%; background: #fff; border: 1.5px solid #dde3ea; border-radius: 12px;
+ padding: 16px 18px; text-align: left; cursor: pointer; font-family: inherit;
+ transition: border-color 0.15s, background 0.15s;
+}
+.purpose-opt:hover { border-color: #0f766e; background: #f0fbf9; }
+.po-title { font-size: 14.5px; font-weight: 600; color: #0f1522; }
+.po-sub { font-size: 12px; color: #6b7280; margin-top: 3px; }
+.btn-join.plato-btn { background: #0f766e; margin-top: 22px; }
+.btn-join.plato-btn:hover { background: #0b5c56; }
+.plato-footer { text-align: center; font-size: 11px; color: #9aa4b2; margin-top: 22px; letter-spacing: 0.02em; }
+.plato-back {
+ display: block; margin: 14px auto 0; background: none; border: none;
+ color: #0f766e; font-size: 12.5px; font-weight: 600; cursor: pointer; font-family: inherit;
+}
+
+/* ── QR2 — DOCTOR ── */
+.qr2-card { max-width: 500px; margin: 0 auto; }
+.doc-top {
+ background: var(--blue); padding: 52px 32px 64px;
+ text-align: center; color: white; position: relative; overflow: hidden;
+}
+.doc-top::before {
+ content: ''; position: absolute; top: -60px; right: -60px;
+ width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,0.06);
+}
+.doc-top::after {
+ content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+ height: 40px; background: var(--white); border-radius: 60% 60% 0 0 / 100% 100% 0 0;
+}
+.doc-icon {
+ width: 92px; height: 92px; border-radius: 50%;
+ background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.2);
+ display: flex; align-items: center; justify-content: center;
+ font-size: 44px; margin: 0 auto 22px;
+}
+.doc-heading { font-size: 30px; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 8px; }
+.doc-sub { font-size: 15px; opacity: 0.7; }
+.doc-body { padding: 28px 32px 32px; }
+.doc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+.doc-box {
+ background: var(--surf); border: 1px solid var(--surf-2);
+ border-radius: var(--r-m); padding: 16px 18px;
+}
+.doc-box .lb { font-size: 11px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
+.doc-box .vl { font-size: 17px; font-weight: 600; color: var(--ink); }
+.doc-pill {
+ background: var(--green-p); border: 1.5px solid var(--green-l);
+ border-radius: var(--r-m); padding: 14px 18px;
+ display: flex; align-items: center; justify-content: center; gap: 10px;
+ color: var(--green); font-size: 14px; font-weight: 600;
+}
+
+/* ── QR3 — DONE ── */
+.qr3-card { max-width: 460px; margin: 0 auto; }
+.done-top {
+ background: var(--green); padding: 56px 32px 68px;
+ text-align: center; color: white; position: relative; overflow: hidden;
+}
+.done-top::before {
+ content: ''; position: absolute; top: -50px; left: -50px;
+ width: 180px; height: 180px; border-radius: 50%; background: rgba(255,255,255,0.06);
+}
+.done-top::after {
+ content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+ height: 40px; background: var(--white); border-radius: 60% 60% 0 0 / 100% 100% 0 0;
+}
+.tick-ring {
+ width: 92px; height: 92px; border-radius: 50%;
+ background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.25);
+ display: flex; align-items: center; justify-content: center;
+ margin: 0 auto 22px;
+}
+.done-heading { font-size: 30px; font-weight: 600; letter-spacing: -0.5px; }
+.done-body { padding: 28px 32px 36px; }
+.done-box {
+ background: var(--green-p); border: 1.5px solid var(--green-l);
+ border-radius: var(--r-m); padding: 22px; text-align: center;
+}
+.done-box .db-clinic { font-size: 13px; font-weight: 600; color: var(--green); margin-bottom: 6px; }
+.done-box .db-msg { font-size: 16px; font-weight: 500; color: var(--green); line-height: 1.5; }
+
+/* ── QUEUE VIEW ── */
+.qv-layout { display: grid; grid-template-columns: 360px 1fr; gap: 24px; align-items: start; }
+.qv-left {}
+.qhero {
+ background: var(--blue); border-radius: var(--r-xl);
+ padding: 34px 28px 30px; text-align: center; color: white;
+ margin-bottom: 14px; position: relative; overflow: hidden;
+}
+.qhero::before { content: ''; position: absolute; top: -50px; right: -50px; width: 160px; height: 160px; border-radius: 50%; background: rgba(255,255,255,0.05); }
+.qhero::after { content: ''; position: absolute; bottom: -40px; left: -30px; width: 120px; height: 120px; border-radius: 50%; background: rgba(255,255,255,0.04); }
+.qh-label { font-size: 11px; font-weight: 500; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px; }
+.qh-num { font-size: 82px; font-weight: 600; line-height: 1; letter-spacing: -3px; font-variant-numeric: tabular-nums; }
+.qh-name { font-size: 15px; opacity: 0.7; margin-top: 8px; font-weight: 400; }
+
+.sg { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; margin-bottom: 12px; }
+.sc {
+ background: var(--white); border-radius: var(--r-m);
+ border: 1px solid var(--surf-2); padding: 15px 12px;
+ text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.sc-v { font-size: 24px; font-weight: 600; color: var(--ink); letter-spacing: -0.5px; font-variant-numeric: tabular-nums; }
+.sc-k { font-size: 11px; color: var(--ink-3); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+.sbanner {
+ border-radius: var(--r-m); padding: 11px 16px;
+ display: flex; align-items: center; gap: 8px;
+ font-size: 13px; font-weight: 500; margin-bottom: 12px;
+ border: 1px solid transparent;
+}
+.sb-open { background: var(--green-p); color: var(--green); border-color: var(--green-l); }
+.sb-lunch { background: var(--amber-l); color: var(--amber); border-color: #f5d7a0; }
+.sb-closed { background: var(--surf-2); color: var(--ink-3); border-color: var(--surf-2); }
+
+.pdot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; display: inline-block; animation: pulse 2s infinite; flex-shrink: 0; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+.wa-box {
+ background: #f0fdf6; border: 1.5px solid #a7f3d0;
+ border-radius: var(--r-m); padding: 14px 16px;
+ display: flex; gap: 11px; align-items: flex-start;
+}
+.wa-box .wi { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+.wa-box .wt { font-size: 12px; color: #065f46; line-height: 1.6; }
+.wa-box .wt strong { display: block; font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+
+.qlist {
+ background: var(--white); border-radius: var(--r-l);
+ border: 1px solid var(--surf-2); overflow: hidden;
+ box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.qlist-top {
+ padding: 16px 22px; border-bottom: 1px solid var(--surf-2);
+ display: flex; align-items: center; justify-content: space-between;
+}
+.qlist-top h3 { font-size: 15px; font-weight: 600; }
+.live-tag { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--green); font-weight: 500; }
+
+.bdg {
+ display: inline-flex; align-items: center; gap: 4px;
+ padding: 4px 10px; border-radius: 99px; font-size: 11px; font-weight: 500; white-space: nowrap;
+}
+.b-wait { background: var(--blue-l); color: var(--blue); }
+.b-doc { background: var(--green-l); color: var(--green); }
+.b-done { background: var(--surf-2); color: var(--ink-3); }
+.b-ns { background: var(--amber-l); color: var(--amber); }
+
+.qrow {
+ display: flex; align-items: center; padding: 13px 22px;
+ border-bottom: 1px solid var(--surf-2); gap: 14px; transition: background 0.1s;
+}
+.qrow:last-child { border-bottom: none; }
+.qrow.rmine { background: var(--blue-p); }
+.qrow.rdoc { background: var(--green-p); }
+.qrow.rns { background: #fffbeb; }
+.qrow:not(.rmine):not(.rdoc):not(.rns):hover { background: var(--surf); }
+.qnum { font-size: 14px; font-weight: 600; color: var(--blue); width: 40px; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+.qinfo { flex: 1; font-size: 13px; color: var(--ink-2); }
+.qtag { font-size: 11px; color: var(--blue); font-weight: 600; margin-left: 5px; }
+
+/* ── DASHBOARD ── */
+.dh {
+ background: var(--ink); border-radius: var(--r-xl);
+ padding: 22px 28px; display: flex; align-items: center;
+ justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 20px;
+}
+.dh h2 { font-size: 18px; font-weight: 600; color: white; letter-spacing: -0.3px; }
+.dh-sub { font-size: 12px; color: #5a7a9a; margin-top: 3px; }
+.tog-row { display: flex; gap: 6px; }
+.tp {
+ padding: 8px 16px; border-radius: 99px; border: 1.5px solid #2a3a4a;
+ background: transparent; color: #5a7a9a; font-family: inherit;
+ font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s;
+}
+.tp:hover { border-color: #4a6a8a; color: #8aafc8; }
+.tp-open { background: #0a4025; border-color: #0a4025; color: #a7f3d0; }
+.tp-lunch { background: #6b3300; border-color: #6b3300; color: #fde68a; }
+.tp-closed { background: #6b1414; border-color: #6b1414; color: #fecaca; }
+
+.kgrid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 20px; }
+.kcard {
+ background: var(--white); border-radius: var(--r-l);
+ border: 1px solid var(--surf-2); padding: 18px 20px;
+ box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.kv { font-size: 34px; font-weight: 600; line-height: 1; letter-spacing: -1px; font-variant-numeric: tabular-nums; }
+.kl { font-size: 12px; color: var(--ink-3); margin-top: 6px; }
+
+.tc {
+ background: var(--white); border-radius: var(--r-l);
+ border: 1px solid var(--surf-2); overflow: hidden;
+ box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.tcbar {
+ padding: 14px 20px; border-bottom: 1px solid var(--surf-2);
+ background: var(--surf); display: flex; align-items: center;
+ justify-content: space-between; gap: 12px;
+}
+.tcbar h3 { font-size: 15px; font-weight: 600; }
+.btn-add {
+ background: var(--blue); color: white; border: none;
+ border-radius: var(--r-s); padding: 9px 16px; font-family: inherit;
+ font-size: 13px; font-weight: 500; cursor: pointer; transition: background 0.15s;
+}
+.btn-add:hover { background: var(--blue-d); }
+
+table { width: 100%; border-collapse: collapse; }
+thead { background: var(--surf); }
+th {
+ padding: 10px 16px; text-align: left; font-size: 11px; font-weight: 600;
+ color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.07em;
+ border-bottom: 1px solid var(--surf-2);
+}
+td { padding: 13px 16px; font-size: 13px; border-bottom: 1px solid var(--surf-2); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr.tr-doc td { background: var(--green-p); }
+tr.tr-ns td { background: #fffbeb; }
+tr:not(.tr-doc):not(.tr-ns):hover td { background: var(--surf); }
+.tc-n { font-size: 14px; font-weight: 600; color: var(--blue); font-variant-numeric: tabular-nums; }
+.tc-name { font-weight: 500; }
+.tc-m { color: var(--ink-3); font-size: 12px; }
+
+.acts { display: flex; gap: 5px; flex-wrap: wrap; }
+.ab {
+ padding: 5px 11px; border-radius: var(--r-s); border: 1.5px solid var(--surf-2);
+ background: var(--white); font-family: inherit; font-size: 11px; font-weight: 500;
+ cursor: pointer; color: var(--ink-2); transition: all 0.12s; white-space: nowrap;
+}
+.ab:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-p); }
+.ab.ok:hover { border-color: var(--green); color: var(--green); background: var(--green-p); }
+.ab.del:hover { border-color: var(--red); color: var(--red); background: var(--red-l); }
+
+/* ── MODAL ── */
+.mbg {
+ display: none; position: fixed; inset: 0; background: rgba(13,27,42,0.55);
+ z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(3px);
+}
+.mbg.open { display: flex; }
+.modal {
+ background: var(--white); border-radius: var(--r-xl); padding: 28px;
+ width: 100%; max-width: 420px; box-shadow: 0 8px 40px rgba(0,0,0,0.18); margin: 20px;
+}
+.modal h3 { font-size: 17px; font-weight: 600; margin-bottom: 20px; letter-spacing: -0.2px; }
+.mfoot { display: flex; gap: 10px; margin-top: 22px; }
+.btn-cancel {
+ flex: 1; padding: 12px; border: 1.5px solid var(--surf-2); background: var(--surf);
+ border-radius: var(--r-s); font-family: inherit; font-size: 14px; font-weight: 500;
+ cursor: pointer; color: var(--ink-2); transition: background 0.12s;
+}
+.btn-cancel:hover { background: var(--surf-2); }
+
+/* ── TOAST ── */
+.toast {
+ position: fixed; bottom: 24px; right: 24px;
+ background: var(--ink); color: white; padding: 12px 20px;
+ border-radius: var(--r-m); font-size: 13px; font-weight: 500;
+ opacity: 0; transform: translateY(10px);
+ transition: opacity 0.2s, transform 0.2s;
+ z-index: 300; pointer-events: none; max-width: 320px;
+ box-shadow: 0 4px 20px rgba(0,0,0,0.22);
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 800px) {
+ .qv-layout { grid-template-columns: 1fr; }
+ .kgrid { grid-template-columns: 1fr 1fr; }
+ .doc-grid { grid-template-columns: 1fr; }
+ .tab { padding: 0 10px; font-size: 11px; }
+ td, th { padding: 10px 10px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+ <div class="nav-inner">
+  <div class="brand">
+   <div class="brand-mark">CQ</div>
+   <div class="brand-name">ClearQ SG</div>
+   <div class="brand-sep"></div>
+   <div class="brand-clinic">Clinic X</div>
+  </div>
+  <div class="tabs">
+   <button class="tab active" onclick="go('qr1',this)">
+    <span class="tab-eyebrow">QR 1</span>Patient Registration
+   </button>
+   <button class="tab" onclick="go('queue',this)">
+    <span class="tab-eyebrow">Patient View</span>Queue Status
+   </button>
+   <button class="tab" onclick="go('dash',this)">
+    <span class="tab-eyebrow">Staff Only</span>Receptionist Dashboard
+   </button>
+  </div>
+ </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ═══════════════════════════ QR 1 ═══════════════════════════ -->
+<!-- This tab simulates what a patient sees after scanning the clinic's QR code.
+     Flow: ClearQ redirect screen → Plato purpose-of-visit menu → Plato booking form
+     → "confirming with clinic" (simulates the webhook) → ClearQ success screen.
+     Patient data is entered on the Plato-branded steps only — ClearQ never sees it
+     directly, it only receives back a queue number + name via the (simulated) webhook. -->
+<div id="sheet-qr1" class="sheet active">
+ <div class="pbar"><div class="clock"><span class="cdot"></span><span class="clk">9:30 AM</span></div></div>
+
+ <!-- STEP 1: ClearQ redirect interstitial -->
+ <div class="qr1-card card" id="step-redirect">
+  <div class="redirect-wrap">
+   <div class="redirect-spinner"></div>
+   <div class="redirect-clinic">Clinic X</div>
+   <div class="redirect-msg">Redirecting you to Clinic X's booking system —<br>powered by <strong>Plato Medical</strong></div>
+  </div>
+ </div>
+
+ <!-- STEP 2: Plato — choose purpose of visit -->
+ <div class="plato-card card" id="step-purpose" style="display:none">
+  <div class="browser-chrome">
+   <span class="bc-dot bc-r"></span><span class="bc-dot bc-y"></span><span class="bc-dot bc-g"></span>
+   <div class="bc-url">
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><rect x="2" y="4.5" width="6" height="4.5" rx="1" stroke="#4a5568" stroke-width="0.8"/><path d="M3.2 4.5V3.2a1.8 1.8 0 0 1 3.6 0V4.5" stroke="#4a5568" stroke-width="0.8"/></svg>
+    clinic.platomedical.com/book/Y2FyZWNvbm5lY3RjbGluaWM=
+   </div>
+  </div>
+  <div class="plato-body">
+   <h2 class="plato-h">What would you like to book?</h2>
+   <div class="plato-sub">Select a service to continue</div>
+   <div class="purpose-list">
+    <button class="purpose-opt" onclick="selectPurpose('Normal Doctor Consultation','You are making an appointment to see Dr XXXX')">
+     <div class="po-title">Normal Doctor Consultation</div>
+     <div class="po-sub">General consultation with a clinic doctor</div>
+    </button>
+    <button class="purpose-opt" onclick="selectPurpose('Vaccination','You are making an appointment to schedule for a vaccination')">
+     <div class="po-title">Vaccination</div>
+     <div class="po-sub">Book a vaccination appointment</div>
+    </button>
+    <button class="purpose-opt" onclick="selectPurpose('Health Screening','You are booking an appointment for a health screening. Fasting may be required for blood glucose tests.')">
+     <div class="po-title">Health Screening</div>
+     <div class="po-sub">Book a general health screening</div>
+    </button>
+   </div>
+   <div class="plato-footer">Powered by Plato</div>
+  </div>
+ </div>
+
+ <!-- STEP 3: Plato — booking form (this is where the patient's name/phone actually live) -->
+ <div class="plato-card card" id="step-booking" style="display:none">
+  <div class="browser-chrome">
+   <span class="bc-dot bc-r"></span><span class="bc-dot bc-y"></span><span class="bc-dot bc-g"></span>
+   <div class="bc-url">
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><rect x="2" y="4.5" width="6" height="4.5" rx="1" stroke="#4a5568" stroke-width="0.8"/><path d="M3.2 4.5V3.2a1.8 1.8 0 0 1 3.6 0V4.5" stroke="#4a5568" stroke-width="0.8"/></svg>
+    clinic.platomedical.com/book/Y2FyZWNvbm5lY3RjbGluaWM=
+   </div>
+  </div>
+  <div class="plato-body">
+   <h2 class="plato-h" id="pb-purpose">Normal Doctor Consultation</h2>
+   <div class="plato-sub" id="pb-doctor">You are making an appointment to see Dr XXXX</div>
+   <div class="fg">
+    <label class="fl">Mobile number</label>
+    <input class="fi" id="plato-phone" type="tel" inputmode="numeric" placeholder="" maxlength="8" oninput="checkReturningPlato()">
+   </div>
+   <div class="fg">
+    <label class="fl">Full name <span class="fl-opt">(as per NRIC)</span></label>
+    <input class="fi" id="plato-name" type="text" placeholder="">
+    <div class="returning-tag" id="returning-tag-plato">
+     <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+      <circle cx="6.5" cy="6.5" r="5.5" stroke="#0f7a4a" stroke-width="1.3"/>
+      <polyline points="3.8,6.7 5.6,8.5 9.2,4.5" stroke="#0f7a4a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+     </svg>
+     Welcome back — Plato has your details on file
+    </div>
+   </div>
+   <button class="btn-join plato-btn" onclick="submitPlatoBooking()">Confirm booking</button>
+   <button class="plato-back" onclick="showStep('purpose')">← Back to booking options</button>
+   <div class="plato-footer">Powered by Plato · Your information is stored by Plato, not by ClearQ or Clinic X</div>
+  </div>
+ </div>
+
+ <!-- STEP 4: ClearQ interstitial simulating the Plato → ClearQ webhook call -->
+ <div class="qr1-card card" id="step-confirming" style="display:none">
+  <div class="redirect-wrap">
+   <div class="redirect-spinner"></div>
+   <div class="redirect-msg">Confirming your booking with Clinic X…</div>
+  </div>
+ </div>
+
+ <!-- STEP 5: ClearQ success screen — same as before, just reached a different way -->
+ <div class="qr1-card card" id="step-success" style="display:none">
+  <div class="reg-top">
+   <div class="reg-top-left">
+    <div class="rt-clinic">Clinic X</div>
+    <div class="rt-sub">ClearQ SG · Booking confirmed</div>
+   </div>
+   <div class="reg-top-right"></div>
+  </div>
+  <div class="reg-body">
+   <div class="reg-success show" id="reg-success">
+    <div class="success-ring">
+     <svg class="success-tick" width="46" height="46" viewBox="0 0 46 46" fill="none">
+      <polyline points="10,24 20,34 36,14" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+     </svg>
+    </div>
+    <div class="success-heading">You're registered!</div>
+    <div class="success-qnum" id="success-qnum">Q09</div>
+    <p class="success-text">Your booking was confirmed with <span class="wa">Plato</span> and Clinic X has added you to today's queue. You'll receive a <span class="wa">WhatsApp</span> message with your queue number and a link to track your live status. Thank you!</p>
+   </div>
+  </div>
+ </div>
+</div>
+
+<!-- ═══════════════════════════ QUEUE VIEW ═══════════════════════════ -->
+<div id="sheet-queue" class="sheet">
+ <div class="pbar"><div class="clock"><span class="cdot"></span><span class="clk">9:30 AM</span></div></div>
+ <div class="qv-layout">
+  <div class="qv-left">
+   <div class="qhero">
+    <div class="qh-label">Your queue number</div>
+    <div class="qh-num" id="hero-qnum">—</div>
+    <div class="qh-name" id="hero-name">Fill in QR 1 to join the queue</div>
+   </div>
+   <div class="sg">
+    <div class="sc"><div class="sc-v" id="pv-ahead">2</div><div class="sc-k">Ahead of you</div></div>
+    <div class="sc"><div class="sc-v">~15 min</div><div class="sc-k">Est. wait</div></div>
+    <div class="sc"><div class="sc-v" id="pv-serving">Q05</div><div class="sc-k">Now serving</div></div>
+    <div class="sc" style="display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px">
+     <div id="pv-pill" class="bdg b-doc"><span class="pdot"></span>&nbsp;Open</div>
+     <div class="sc-k">Clinic</div>
+    </div>
+   </div>
+   <div id="pv-banner" class="sbanner sb-open"><span class="pdot"></span>&nbsp;Clinic is open — queue is running normally</div>
+   <div class="wa-box">
+    <div class="wi"></div>
+    <div class="wt"><strong>WhatsApp alert is set</strong>You'll be notified when 2 patients remain ahead of you. You can wait at home.</div>
+   </div>
+  </div>
+  <div class="qlist">
+   <div class="qlist-top">
+    <h3>Today's queue</h3>
+    <div class="live-tag"><span class="pdot"></span>&nbsp;Live</div>
+   </div>
+   <div class="qrow rdoc" id="pv-q05"><div class="qnum">Q05</div><div class="qinfo">Patient</div><span class="bdg b-doc">With doctor</span></div>
+   <div class="qrow" id="pv-q06"><div class="qnum">Q06</div><div class="qinfo">Patient</div><span class="bdg b-wait">Waiting</span></div>
+   <div class="qrow" id="pv-q07"><div class="qnum">Q07</div><div class="qinfo">Patient</div><span class="bdg b-wait">Waiting</span></div>
+   <div class="qrow" id="pv-q08"><div class="qnum">Q08</div><div class="qinfo">Patient</div><span class="bdg b-wait">Waiting</span></div>
+  </div>
+ </div>
+</div>
+
+<!-- ═══════════════════════════ DASHBOARD ═══════════════════════════ -->
+<div id="sheet-dash" class="sheet">
+ <div class="pbar"><div class="clock"><span class="cdot"></span><span class="clk">9:30 AM</span></div></div>
+ <div class="dh">
+  <div>
+   <h2>Clinic X</h2>
+   <div class="dh-sub" id="ddate"></div>
+  </div>
+  <div class="tog-row">
+   <button class="tp tp-open" id="tog-open" onclick="setStatus('open')">Open</button>
+   <button class="tp" id="tog-lunch" onclick="setStatus('lunch')">Lunch break</button>
+   <button class="tp" id="tog-closed" onclick="setStatus('closed')">Closed</button>
+  </div>
+ </div>
+ <div class="kgrid">
+  <div class="kcard"><div class="kv" id="kpi-total">8</div><div class="kl">Patients today</div></div>
+  <div class="kcard"><div class="kv" style="color:var(--blue)" id="kpi-wait">3</div><div class="kl">In queue</div></div>
+  <div class="kcard"><div class="kv" style="color:var(--green)" id="kpi-completed">3</div><div class="kl">Completed</div></div>
+  <div class="kcard"><div class="kv" style="color:var(--amber)" id="kpi-flagged">1</div><div class="kl">Flagged (no-show?)</div></div>
+ </div>
+ <div class="tc">
+  <div class="tcbar">
+   <h3>Current queue</h3>
+   <button class="btn-add" onclick="openModal()">+ Add patient manually</button>
+  </div>
+  <table>
+   <thead><tr><th>No.</th><th>Name</th><th>Phone</th><th>Reason</th><th>Registered</th><th>Saw doctor at</th><th>Status</th><th>Actions</th></tr></thead>
+   <tbody id="qtbody">
+    <tr><td class="tc-n">Q01</td><td class="tc-name">Lim Beng Huat</td><td class="tc-m">9123 0001</td><td class="tc-m">Normal Doctor Consultation</td><td class="tc-m">8:02 am</td><td class="tc-m">8:15 am</td><td><span class="bdg b-done">Done</span></td><td><span style="color:var(--ink-4);font-size:12px">—</span></td></tr>
+    <tr><td class="tc-n">Q02</td><td class="tc-name">Priya Nair</td><td class="tc-m">9123 0002</td><td class="tc-m">Health Screening</td><td class="tc-m">8:14 am</td><td class="tc-m">8:28 am</td><td><span class="bdg b-done">Done</span></td><td><span style="color:var(--ink-4);font-size:12px">—</span></td></tr>
+    <tr><td class="tc-n">Q03</td><td class="tc-name">Ahmad Razif</td><td class="tc-m">9123 0003</td><td class="tc-m">Normal Doctor Consultation</td><td class="tc-m">8:28 am</td><td class="tc-m">8:44 am</td><td><span class="bdg b-done">Done</span></td><td><span style="color:var(--ink-4);font-size:12px">—</span></td></tr>
+    <tr><td class="tc-n">Q04</td><td class="tc-name">Wong Mei Lin</td><td class="tc-m">9123 0004</td><td class="tc-m">Vaccination</td><td class="tc-m">8:42 am</td><td class="tc-m">8:57 am</td><td><span class="bdg b-done">Done</span></td><td><span style="color:var(--ink-4);font-size:12px">—</span></td></tr>
+    <tr class="tr-doc" id="dash-q05"><td class="tc-n">Q05</td><td class="tc-name">Rajesh Kumar</td><td class="tc-m">9123 0005</td><td class="tc-m">Normal Doctor Consultation</td><td class="tc-m">8:55 am</td><td class="tc-m">9:20 am</td><td><span class="bdg b-doc">With doctor</span></td><td><div class="acts"><button class="ab ok" onclick="upd(this,'done','Q05','Rajesh Kumar')">Mark done</button></div></td></tr>
+    <tr class="tr-ns" id="dash-q06"><td class="tc-n">Q06</td><td class="tc-name">Nur Hidayah</td><td class="tc-m">9123 0006</td><td class="tc-m">Health Screening</td><td class="tc-m">8:58 am</td><td class="tc-m">—</td><td><span class="bdg b-ns">No-show?</span></td><td><div class="acts"><button class="ab ok" onclick="upd(this,'arrived','Q06','Nur Hidayah')">Arrived</button><button class="ab del" onclick="upd(this,'remove','Q06','Nur Hidayah')">Remove</button></div></td></tr>
+    <tr id="dash-q07"><td class="tc-n">Q07</td><td class="tc-name">Tan Ah Kow</td><td class="tc-m">9123 0007</td><td class="tc-m">Normal Doctor Consultation</td><td class="tc-m">9:14 am</td><td class="tc-m">—</td><td><span class="bdg b-wait">Waiting</span></td><td><div class="acts"><button class="ab" onclick="upd(this,'doctor','Q07','Tan Ah Kow')">Call in</button><button class="ab del" onclick="upd(this,'remove','Q07','Tan Ah Kow')">Remove</button></div></td></tr>
+    <tr id="dash-q08"><td class="tc-n">Q08</td><td class="tc-name">Siti Rahimah</td><td class="tc-m">9123 0008</td><td class="tc-m">Vaccination</td><td class="tc-m">9:22 am</td><td class="tc-m">—</td><td><span class="bdg b-wait">Waiting</span></td><td><div class="acts"><button class="ab" onclick="upd(this,'doctor','Q08','Siti Rahimah')">Call in</button><button class="ab del" onclick="upd(this,'remove','Q08','Siti Rahimah')">Remove</button></div></td></tr>
+   </tbody>
+  </table>
+ </div>
+</div>
+
+</div><!-- /wrap -->
+
+<!-- MODAL -->
+<div class="mbg" id="modal" onclick="closeOut(event)">
+ <div class="modal">
+  <h3>Add patient manually</h3>
+  <div class="fg"><label class="fl">Mobile number</label><input class="fi" type="tel" id="m-phone" inputmode="numeric" placeholder="" maxlength="8" oninput="checkReturningManual()"></div>
+  <div class="fg">
+   <label class="fl">Full name</label>
+   <input class="fi" type="text" id="m-name" placeholder="">
+   <div class="returning-tag" id="returning-tag-manual">
+    <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+     <circle cx="6.5" cy="6.5" r="5.5" stroke="#0f7a4a" stroke-width="1.3"/>
+     <polyline points="3.8,6.7 5.6,8.5 9.2,4.5" stroke="#0f7a4a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Welcome back — we've filled in your details
+   </div>
+  </div>
+  <div class="fg"><label class="fl">Reason <span class="fl-opt">(optional)</span></label><input class="fi" type="text" id="m-reason" placeholder="e.g. fever, follow-up"></div>
+  <div class="mfoot">
+   <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+   <button class="btn-join" style="flex:1;margin-top:0" onclick="addPt()">Add to queue</button>
+  </div>
+ </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+ // ── QR1 flow state — declared early so resetQR1() can use them on initial load below
+ let qr1Timer = null;
+ let selectedPurpose = '';
+
+ // ── Date label
+ document.getElementById('ddate').textContent = 'Tuesday, 16 June 2026 · 9:30 AM';
+ recalcKpis();
+ resetQR1(); // QR1 tab is open by default on load, so start its flow fresh
+
+ // ── Tab switch
+ function go(id, btn) {
+  document.querySelectorAll('.sheet').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('sheet-' + id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'qr1') resetQR1(); // replay the redirect flow each time this tab is opened, for demo purposes
+ }
+
+ // ── Clinic status — syncs to patient queue view
+ function setStatus(s) {
+  document.getElementById('tog-open').className = 'tp' + (s==='open'?' tp-open':'');
+  document.getElementById('tog-lunch').className = 'tp' + (s==='lunch'?' tp-lunch':'');
+  document.getElementById('tog-closed').className = 'tp' + (s==='closed'?' tp-closed':'');
+  const banner = document.getElementById('pv-banner');
+  const pill = document.getElementById('pv-pill');
+  if (s === 'open') {
+   banner.className = 'sbanner sb-open';
+   banner.innerHTML = '<span class="pdot"></span>&nbsp;Clinic is open — queue is running normally';
+   pill.className = 'bdg b-doc';
+   pill.innerHTML = '<span class="pdot"></span>&nbsp;Open';
+  } else if (s === 'lunch') {
+   banner.className = 'sbanner sb-lunch';
+   banner.innerHTML = '&nbsp;Clinic is on lunch break — queue will resume shortly';
+   pill.className = 'bdg b-ns';
+   pill.innerHTML = '&nbsp;Lunch';
+  } else {
+   banner.className = 'sbanner sb-closed';
+   banner.innerHTML = '&nbsp;Clinic is closed for today';
+   pill.className = 'bdg b-done';
+   pill.innerHTML = '&nbsp;Closed';
+  }
+  toast({ open:'Clinic set to Open', lunch:'Clinic set to Lunch break', closed:'Clinic set to Closed' }[s] + ' — patient view updated');
+ }
+
+ // ── Row status update — syncs dashboard + patient view
+ let total = 8;
+ let undoStack = [];
+
+ // Saves the current state of the dashboard table and patient queue list so it can be restored with Ctrl+Z
+ function saveSnapshot() {
+  undoStack.push({
+   dash: document.getElementById('qtbody').innerHTML,
+   patient: document.querySelector('#sheet-queue .qlist').innerHTML
+  });
+  if (undoStack.length > 20) undoStack.shift(); // keep memory bounded
+ }
+
+ function undoLastAction() {
+  if (undoStack.length === 0) { toast('Nothing to undo'); return; }
+  const last = undoStack.pop();
+  document.getElementById('qtbody').innerHTML = last.dash;
+  document.querySelector('#sheet-queue .qlist').innerHTML = last.patient;
+  recalcStats();
+  recalcKpis();
+  toast('Action undone');
+ }
+
+ document.addEventListener('keydown', function(e) {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
+   e.preventDefault();
+   undoLastAction();
+  }
+ });
+
+ function upd(btn, action, qNum, name) {
+  saveSnapshot();
+  const dRow = btn.closest('tr');
+  const dBadge = dRow.querySelector('.bdg');
+  const pvRow = document.getElementById('pv-' + qNum.toLowerCase());
+
+  if (action === 'doctor') {
+   dRow.className = 'tr-doc';
+   dBadge.className = 'bdg b-doc'; dBadge.textContent = 'With doctor';
+   btn.closest('.acts').innerHTML = `<button class="ab ok" onclick="upd(this,'done','${qNum}','${name}')">Mark done</button>`;
+   if (pvRow) { pvRow.className = 'qrow rdoc'; pvRow.querySelector('.bdg').className = 'bdg b-doc'; pvRow.querySelector('.bdg').textContent = 'With doctor'; }
+
+  } else if (action === 'done') {
+   dRow.className = '';
+   dBadge.className = 'bdg b-done'; dBadge.textContent = 'Done';
+   btn.closest('.acts').innerHTML = '<span style="color:var(--ink-4);font-size:12px">—</span>';
+   if (pvRow) { pvRow.remove(); }
+
+  } else if (action === 'arrived') {
+   dRow.className = '';
+   dBadge.className = 'bdg b-wait'; dBadge.textContent = 'Waiting';
+   btn.closest('.acts').innerHTML = `<button class="ab" onclick="upd(this,'doctor','${qNum}','${name}')">Call in</button><button class="ab del" onclick="upd(this,'remove','${qNum}','${name}')">Remove</button>`;
+   if (pvRow) { pvRow.className = 'qrow'; pvRow.querySelector('.bdg').className = 'bdg b-wait'; pvRow.querySelector('.bdg').textContent = 'Waiting'; }
+
+  } else if (action === 'remove') {
+   dRow.remove();
+   if (pvRow) pvRow.remove();
+  }
+  recalcStats();
+  recalcKpis();
+ }
+
+ // ── Recalculate KPI cards on receptionist dashboard
+ function recalcKpis() {
+  const rows = Array.from(document.querySelectorAll('#qtbody tr'));
+  let waiting = 0, completed = 0, flagged = 0;
+  rows.forEach(r => {
+   const badgeText = r.querySelector('.bdg') ? r.querySelector('.bdg').textContent.trim() : '';
+   if (badgeText === 'Waiting' || badgeText === 'With doctor') waiting++;
+   else if (badgeText === 'Done') completed++;
+   else if (badgeText === 'No-show?') flagged++;
+  });
+  document.getElementById('kpi-total').textContent = rows.length;
+  document.getElementById('kpi-wait').textContent = waiting;
+  document.getElementById('kpi-completed').textContent = completed;
+  document.getElementById('kpi-flagged').textContent = flagged;
+ }
+
+ // ── Recalculate "ahead of you", "est. wait" and "now serving" for the patient view
+ function recalcStats() {
+  const rows = Array.from(document.querySelectorAll('#sheet-queue .qlist .qrow'));
+
+  // Find who's "now serving" — the row currently marked "With doctor"
+  const servingRow = rows.find(r => r.querySelector('.bdg') && r.querySelector('.bdg').textContent.trim() === 'With doctor');
+  document.getElementById('pv-serving').textContent = servingRow ? servingRow.querySelector('.qnum').textContent : '—';
+
+  // Find the "you" row
+  const mineRow = rows.find(r => r.classList.contains('rmine'));
+  if (!mineRow) return; // nobody has registered yet
+
+  const mineIndex = rows.indexOf(mineRow);
+  let ahead = 0;
+  for (let i = 0; i < mineIndex; i++) {
+   const badgeText = rows[i].querySelector('.bdg') ? rows[i].querySelector('.bdg').textContent.trim() : '';
+   if (badgeText === 'Waiting' || badgeText === 'With doctor') ahead++;
+  }
+  document.getElementById('pv-ahead').textContent = ahead;
+
+  // Estimate ~7 minutes per patient ahead
+  const estWaitEl = document.querySelector('#sheet-queue .sg .sc:nth-child(2) .sc-v');
+  if (estWaitEl) estWaitEl.textContent = ahead === 0 ? "You're next!" : '~' + (ahead * 7) + ' min';
+ }
+
+ // ── Add patient
+ function openModal() { document.getElementById('modal').classList.add('open'); }
+ function closeModal() { document.getElementById('modal').classList.remove('open'); }
+ function closeOut(e) { if (e.target === document.getElementById('modal')) closeModal(); }
+
+ function addPt() {
+  const rawName = document.getElementById('m-name').value.trim();
+  const rawPhone = document.getElementById('m-phone').value.trim();
+  const reason = document.getElementById('m-reason').value.trim();
+  if (!rawName || !rawPhone) { toast('Please enter name and phone number'); return; }
+  const name = cleanName(rawName);
+  const phoneDisplay = formatPhone(rawPhone);
+  total++;
+  const qNum = 'Q' + String(total).padStart(2,'0');
+  const now = '9:27 AM';
+  const tr = document.createElement('tr');
+  tr.id = 'dash-' + qNum.toLowerCase();
+  tr.innerHTML = `<td class="tc-n">${qNum}</td><td class="tc-name">${name}</td><td class="tc-m">${phoneDisplay}</td><td class="tc-m">${reason || '—'}</td><td class="tc-m">${now}</td><td class="tc-m">—</td><td><span class="bdg b-ns">No-show?</span></td><td><div class="acts"><button class="ab ok" onclick="upd(this,'arrived','${qNum}','${name}')">Arrived</button><button class="ab del" onclick="upd(this,'remove','${qNum}','${name}')">Remove</button></div></td>`;
+  document.getElementById('qtbody').appendChild(tr);
+  const pvRow = document.createElement('div');
+  pvRow.className = 'qrow rns'; pvRow.id = 'pv-' + qNum.toLowerCase();
+  pvRow.innerHTML = `<div class="qnum">${qNum}</div><div class="qinfo">Patient</div><span class="bdg b-wait">Waiting</span>`;
+  document.querySelector('#sheet-queue .qlist').appendChild(pvRow);
+  ['m-name','m-phone','m-reason'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('m-name').readOnly = false;
+  document.getElementById('returning-tag-manual').classList.remove('show');
+  closeModal();
+  toast(name + ' added as ' + qNum + ' → patient view updated');
+  recalcStats();
+  recalcKpis();
+ }
+
+ // ── Returning patient lookup — simulates checking phone number against existing records
+ // Now framed as Plato's own recognition (Plato owns patient data, not ClearQ)
+ const knownPatients = {
+  '82989706': 'Anit Srinivasan'
+ };
+
+ // ── QR1 step navigation ───────────────────────────────────────────────
+ // The QR1 tab is a chain of 5 "steps" (divs with id="step-..."), only one
+ // visible at a time. showStep() hides all of them and shows the one asked for.
+ function showStep(name) {
+  ['redirect','purpose','booking','confirming','success'].forEach(s => {
+   document.getElementById('step-' + s).style.display = (s === name) ? '' : 'none';
+  });
+  clearTimeout(qr1Timer);
+  if (name === 'redirect') {
+   // auto-advance from the "redirecting..." screen straight to Plato's page
+   qr1Timer = setTimeout(() => showStep('purpose'), 1600);
+  }
+ }
+
+ // Called on page load and every time the QR1 tab is (re)opened, so the demo
+ // can be replayed cleanly for multiple "mock patients" without stale data.
+ function resetQR1() {
+  clearTimeout(qr1Timer);
+  selectedPurpose = '';
+  const nameInput = document.getElementById('plato-name');
+  const phoneInput = document.getElementById('plato-phone');
+  nameInput.value = '';
+  phoneInput.value = '';
+  nameInput.readOnly = false;
+  document.getElementById('returning-tag-plato').classList.remove('show');
+  showStep('redirect');
+ }
+
+ // Patient picked a purpose of visit on Plato's mock page
+ function selectPurpose(purpose, subtext) {
+  selectedPurpose = purpose;
+  document.getElementById('pb-purpose').textContent = purpose;
+  document.getElementById('pb-doctor').textContent = subtext;
+  showStep('booking');
+ }
+
+ // Returning-patient lookup on Plato's mock booking form
+ function checkReturningPlato() {
+  const phoneInput = document.getElementById('plato-phone');
+  const nameInput = document.getElementById('plato-name');
+  const tag = document.getElementById('returning-tag-plato');
+  const digits = phoneInput.value.replace(/\D/g, '');
+  phoneInput.value = digits;
+
+  if (knownPatients[digits]) {
+   nameInput.value = knownPatients[digits];
+   nameInput.readOnly = true;
+   tag.classList.add('show');
+  } else {
+   if (nameInput.readOnly) { nameInput.value = ''; nameInput.readOnly = false; }
+   tag.classList.remove('show');
+  }
+ }
+
+ // Patient submits the Plato booking form. This simulates: Plato saves the
+ // booking → fires a webhook to ClearQ → ClearQ adds the patient to today's queue.
+ function submitPlatoBooking() {
+  const rawName = document.getElementById('plato-name').value.trim();
+  const rawPhone = document.getElementById('plato-phone').value.trim();
+  if (!rawName) { toast('Please enter your name to continue'); return; }
+  if (!rawPhone) { toast('Please enter your mobile number'); return; }
+
+  const name = cleanName(rawName);
+  const phoneDisplay = formatPhone(rawPhone);
+
+  showStep('confirming');
+  qr1Timer = setTimeout(() => {
+   const qNum = completeRegistration(name, phoneDisplay, selectedPurpose);
+   document.getElementById('success-qnum').textContent = qNum;
+   showStep('success');
+  }, 1300);
+ }
+
+ // Adds a newly-registered patient to the receptionist dashboard + patient queue
+ // view. In the real system this runs when ClearQ's webhook endpoint receives
+ // Plato's booking-confirmed event, not when a form is submitted on ClearQ itself.
+ function completeRegistration(name, phoneDisplay, reason) {
+  total++;
+  const qNum = 'Q' + String(total).padStart(2,'0');
+
+  const tr = document.createElement('tr');
+  tr.id = 'dash-' + qNum.toLowerCase();
+  tr.innerHTML = `<td class="tc-n">${qNum}</td><td class="tc-name">${name}</td><td class="tc-m">${phoneDisplay}</td><td class="tc-m">${reason || '—'}</td><td class="tc-m">9:30 AM</td><td class="tc-m">—</td><td><span class="bdg b-ns">No-show?</span></td><td><div class="acts"><button class="ab ok" onclick="upd(this,'arrived','${qNum}','${name}')">Arrived</button><button class="ab del" onclick="upd(this,'remove','${qNum}','${name}')">Remove</button></div></td>`;
+  document.getElementById('qtbody').appendChild(tr);
+
+  document.getElementById('hero-qnum').textContent = qNum;
+  document.getElementById('hero-name').textContent = name;
+
+  document.querySelectorAll('.qrow.rmine').forEach(row => {
+   row.className = 'qrow';
+   row.querySelector('.qinfo').innerHTML = 'Patient';
+  });
+
+  const pvRow = document.createElement('div');
+  pvRow.className = 'qrow rmine';
+  pvRow.id = 'pv-' + qNum.toLowerCase();
+  pvRow.innerHTML = `<div class="qnum">${qNum}</div><div class="qinfo">${name}<span class="qtag">(you)</span></div><span class="bdg b-wait">Waiting</span>`;
+  document.querySelector('#sheet-queue .qlist').appendChild(pvRow);
+
+  recalcStats();
+  recalcKpis();
+  return qNum;
+ }
+
+ // ── Same returning patient lookup, for the "Add patient manually" modal
+ function checkReturningManual() {
+  const phoneInput = document.getElementById('m-phone');
+  const nameInput = document.getElementById('m-name');
+  const tag = document.getElementById('returning-tag-manual');
+  const digits = phoneInput.value.replace(/\D/g, '');
+  phoneInput.value = digits;
+
+  if (knownPatients[digits]) {
+   nameInput.value = knownPatients[digits];
+   nameInput.readOnly = true;
+   tag.classList.add('show');
+  } else {
+   if (nameInput.readOnly) { nameInput.value = ''; nameInput.readOnly = false; }
+   tag.classList.remove('show');
+  }
+ }
+
+ // ── Format an 8-digit SG number as "XXXX XXXX" for display on the dashboard
+ function formatPhone(digits) {
+  const clean = digits.replace(/\D/g, '');
+  if (clean.length !== 8) return clean;
+  return clean.slice(0,4) + ' ' + clean.slice(4);
+ }
+
+ // ── Clean up a patient-entered name: strip stray symbols, Capitalise Each Word
+ function cleanName(raw) {
+  const stripped = raw.replace(/[^a-zA-Z\s'-]/g, '').trim().replace(/\s+/g, ' ');
+  if (!stripped) return stripped;
+  return stripped.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+ }
+
+ // ── Toast
+ let tt;
+ function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(tt); tt = setTimeout(() => el.classList.remove('show'), 3200);
+ }
+</script>
+</body>
+</html>
