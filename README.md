@@ -1,6 +1,6 @@
 ClearQ SG
 
-A digital queue management system for GP clinics in Singapore, letting patients check their position in line remotely instead of waiting physically on site. Built under my startup VeenaTech.
+A digital queue management system for GP clinics in Singapore, letting patients check their position in line remotely instead of waiting physically on site. 
 
 Overview
 
